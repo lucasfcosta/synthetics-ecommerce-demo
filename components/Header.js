@@ -45,6 +45,11 @@ const Header = ({}) => {
                   View Cart
                 </a>
               </Link>
+              <Link href="/cart/mfa">
+                <a className="btn btn-primary btn-light ml-2" role="button">
+                  Set up MFA
+                </a>
+              </Link>
             </form>
           </div>
           <style jsx>{`

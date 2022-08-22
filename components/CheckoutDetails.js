@@ -1,22 +1,16 @@
-import Cookies from "js-cookie";
 import React from "react";
 import { Form, Field } from "react-final-form";
+import { placeOrder } from "../utils/orders";
 import * as storage from "../utils/storage";
 
 const onSubmit = async () => {
-  const sessionId = Cookies.get("session_id");
-  const response = await fetch(`/api/cart/checkout`, {
-    method: "post",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(storage.get(sessionId)),
-  });
-  const data = await response.json();
-  storage.set("order", data);
-  // clear items in cart
-  storage.del(sessionId);
-  window.location.replace("/cart/checkout");
+  const mfaEnabled = storage.get("hasMfa");
+
+  if (!mfaEnabled) {
+    placeOrder()
+  } else {
+    window.location.replace("/cart/mfa-auth");
+  }
 };
 
 const CheckoutDetails = ({}) => (

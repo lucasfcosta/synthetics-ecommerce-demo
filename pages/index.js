@@ -1,3 +1,5 @@
+import "../components/ApmContext";
+
 import React from "react";
 import useSWR from "swr";
 import Footer from "../components/Footer";

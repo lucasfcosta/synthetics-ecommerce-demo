@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@elastic/apm-rum": "^5.12.0",
+    "elastic-apm-node": "^3.38.0",
     "final-form": "^4.20.1",
     "js-cookie": "^2.2.1",
     "next": "10.0.3",

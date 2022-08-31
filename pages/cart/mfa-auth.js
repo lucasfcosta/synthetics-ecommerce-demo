@@ -1,25 +1,27 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { TOTP_VALUE, generateTotp } from  "../../utils/totp";
 import { Form, Field } from "react-final-form";
 import { placeOrder } from "../../utils/orders";
+import { ApmContext } from "../../components/ApmContext";
 
 // Here to aid entering an MFA without having to set it up
 console.log(`MFA Code: ${generateTotp(TOTP_VALUE)}`)
 
 const MFAAuth = () => {
   const [ hasError, setHasError ] = useState(false)
+  const { apm } = useContext(ApmContext);
 
   const onSubmit = useCallback(async ({ mfa }) => {
     const expectedTotp = generateTotp(TOTP_VALUE)
     if (mfa === expectedTotp) {
       return placeOrder();
     } else {
+      apm.captureError(new Error(`attempted incorrect MFA: ${mfa}`));
       setHasError(true)
     }
   });
-
 
   return (
     <>
@@ -46,6 +48,12 @@ const MFAAuth = () => {
                       { hasError ? <span>Invalid MFA code.</span> : null }
                     </div>
                   </div>
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary"
+                  >
+                    Submit
+                  </button>
                 </form>
               )}
             />
